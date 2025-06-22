@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<domain xmlns="http://xmlns.oracle.com/weblogic/domain"
+        xmlns:sec="http://xmlns.oracle.com/weblogic/security"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:wls="http://xmlns.oracle.com/weblogic/security/wls"
+        xsi:schemaLocation="http://xmlns.oracle.com/weblogic/security/wls http://xmlns.oracle.com/weblogic/security/wls/1.0/wls.xsd
+                            http://xmlns.oracle.com/weblogic/domain http://xmlns.oracle.com/weblogic/1.0/domain.xsd">
+
+  <name>bidswebservice</name>
+  <domain-version>12.2.1.4.0</domain-version>
+  <admin-server-name>AdminServer</admin-server-name>
+  <production-mode-enabled>false</production-mode-enabled>
+  <configuration-version>12.2.1.4.0</configuration-version>
+  <internal-apps-deploy-on-demand-enabled>true</internal-apps-deploy-on-demand-enabled>
+
+  <security-configuration>
+    <name>bidswebservice</name>
+    <realm>
+      <sec:authentication-provider xsi:type="wls:default-authenticatorType">
+        <sec:name>DefaultAuthenticator</sec:name>
+        <sec:control-flag>SUFFICIENT</sec:control-flag>
+      </sec:authentication-provider>
+      <sec:authentication-provider xsi:type="wls:default-identity-asserterType">
+        <sec:name>DefaultIdentityAsserter</sec:name>
+        <sec:active-type>AuthenticatedUser</sec:active-type>
+        <sec:active-type>weblogic-jwt-token</sec:active-type>
+      </sec:authentication-provider>
+      <sec:authentication-provider xsi:type="wls:active-directory-authenticatorType">
+        <sec:name>AD</sec:name>
+        <sec:control-flag>SUFFICIENT</sec:control-flag>
+        <wls:host>dc2-rodc3.bhphotovideo.local</wls:host>
+        <wls:port>636</wls:port>
+        <wls:user-object-class>user</wls:user-object-class>
+        <wls:ssl-enabled>true</wls:ssl-enabled>
+        <wls:user-name-attribute>sAMAccountName</wls:user-name-attribute>
+        <wls:principal>CN=webappsdevproxy,OU=Service_Accounts,DC=bhphotovideo,DC=local</wls:principal>
+        <wls:user-base-dn>DC=bhphotovideo,DC=local</wls:user-base-dn>
+        <wls:credential-encrypted>{AES256}gBMGA0hzs+fY2+hleDeKxFNWTOdzjPJs94bZNQuu6eI=</wls:credential-encrypted>
+        <wls:user-from-name-filter>(&amp;(sAMAccountName=%u)(objectclass=user))</wls:user-from-name-filter>
+        <wls:all-users-filter>sAMAccountName=*</wls:all-users-filter>
+        <wls:group-base-dn>OU=vps,OU=Application Groups,OU=Special Groups,DC=bhphotovideo,DC=local</wls:group-base-dn>
+        <wls:group-from-name-filter>(&amp;(cn=%g)(objectclass=group))</wls:group-from-name-filter>
+        <wls:all-groups-filter>objectClass=group</wls:all-groups-filter>
+        <wls:static-group-object-class>group</wls:static-group-object-class>
+        <wls:static-member-dn-attribute>member</wls:static-member-dn-attribute>
+        <wls:static-group-dns-from-member-dn-filter>(&amp;(member=%M)(objectclass=group))</wls:static-group-dns-from-member-dn-filter>
+        <wls:use-retrieved-user-name-as-principal>false</wls:use-retrieved-user-name-as-principal>
+        <wls:guid-attribute>objectguid</wls:guid-attribute>
+      </sec:authentication-provider>
+      <sec:role-mapper xmlns:xac="http://xmlns.oracle.com/weblogic/security/xacml" xsi:type="xac:xacml-role-mapperType">
+        <sec:name>XACMLRoleMapper</sec:name>
+      </sec:role-mapper>
+      <sec:authorizer xmlns:xac="http://xmlns.oracle.com/weblogic/security/xacml" xsi:type="xac:xacml-authorizerType">
+        <sec:name>XACMLAuthorizer</sec:name>
+      </sec:authorizer>
+      <sec:adjudicator xsi:type="wls:default-adjudicatorType">
+        <sec:name>DefaultAdjudicator</sec:name>
+      </sec:adjudicator>
+      <sec:credential-mapper xsi:type="wls:default-credential-mapperType">
+        <sec:name>DefaultCredentialMapper</sec:name>
+      </sec:credential-mapper>
+      <sec:cert-path-provider xsi:type="wls:web-logic-cert-path-providerType">
+        <sec:name>WebLogicCertPathProvider</sec:name>
+      </sec:cert-path-provider>
+      <sec:cert-path-builder>WebLogicCertPathProvider</sec:cert-path-builder>
+      <sec:deploy-role-ignored>false</sec:deploy-role-ignored>
+      <sec:deploy-policy-ignored>false</sec:deploy-policy-ignored>
+      <sec:security-dd-model>Advanced</sec:security-dd-model>
+      <sec:combined-role-mapping-enabled>true</sec:combined-role-mapping-enabled>
+      <sec:name>myrealm</sec:name>
+      <sec:delegate-m-bean-authorization>false</sec:delegate-m-bean-authorization>
+      <sec:password-validator xmlns:pas="http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator"
+                               xsi:type="pas:system-password-validatorType">
+        <sec:name>SystemPasswordValidator</sec:name>
+        <pas:min-password-length>8</pas:min-password-length>
+        <pas:min-numeric-or-special-characters>1</pas:min-numeric-or-special-characters>
+      </sec:password-validator>
+      <sec:auto-restart-on-non-dynamic-changes>false</sec:auto-restart-on-non-dynamic-changes>
+      <sec:retire-timeout-seconds>60</sec:retire-timeout-seconds>
+    </realm>
+    <default-realm>myrealm</default-realm>
+    <credential-encrypted>{AES256}Yeou1gs+WamFS2HaKtThuvUfGPD49wgmCwuDmcG9InXiDQuTOSF0S6qEpqFu/mT96Kt0Qo9BWVsuar0mCytdWGncbV/wwxxDWOhdpS5MQCdmphYWfNzG2fV9GCeJ2FAL</credential-encrypted>
+    <node-manager-username>weblogic</node-manager-username>
+    <node-manager-password-encrypted>{AES256}CMsq7l8wDgLWiliIhYTg/nvWh1zFC0cydpKt7f5LUUE=</node-manager-password-encrypted>
+  </security-configuration>
+
+  <server>
+    <name>AdminServer</name>
+    <listen-port>8701</listen-port>
+    <ssl>
+      <name>AdminServer</name>
+      <enabled>true</enabled>
+      <listen-port>8702</listen-port>
+    </ssl>
+    <key-stores>CustomIdentityAndCustomTrust</key-stores>
+    <custom-identity-key-store-file-name>/u01/oracle/user_projects/domains/bidswebservice/config/security/vpswdevkeystore.jks</custom-identity-key-store-file-name>
+    <custom-identity-key-store-type>JKS</custom-identity-key-store-type>
+    <custom-identity-key-store-pass-phrase-encrypted>{AES256}8Scys6H94hMZ1oyAn2jYZdPltrr8TsOWw712KY1D5bg=</custom-identity-key-store-pass-phrase-encrypted>
+    <custom-trust-key-store-file-name>/u01/oracle/user_projects/domains/bidswebservice/config/security/trustkeystore.jks</custom-trust-key-store-file-name>
+    <custom-trust-key-store-type>JKS</custom-trust-key-store-type>
+    <custom-trust-key-store-pass-phrase-encrypted>{AES256}uD5drApQzfsQTAIEJmYTZxbAY8HUMkBmyoHDdpt+yWs=</custom-trust-key-store-pass-phrase-encrypted>
+  </server>
+
+  <server>
+    <name>bidswebservice</name>
+    <listen-port>8703</listen-port>
+  </server>
+
+  <foreign-jndi-provider>
+    <name>AD</name>
+    <target>bidswebservice</target>
+    <initial-context-factory>com.sun.jndi.ldap.LdapCtxFactory</initial-context-factory>
+    <provider-url>ldaps://dc2-rodc3.bhphotovideo.local:636</provider-url>
+    <password-encrypted>{AES256}uRfevO4mZDlrdR9guveLMEZxP9nKIPwiBQLHIWI6NJQ=</password-encrypted>
+    <user>CN=webappsdevproxy,OU=Service_Accounts,DC=bhphotovideo,DC=local</user>
+    <foreign-jndi-link>
+      <name>AD-Link</name>
+      <local-jndi-name>ad-link</local-jndi-name>
+      <remote-jndi-name>DC=bhphotovideo,DC=local</remote-jndi-name>
+    </foreign-jndi-link>
+    <properties>java.naming.security.authentication=simple</properties>
+  </foreign-jndi-provider>
+
+  <jdbc-system-resource>
+    <name>informix-test</name>
+    <target>bidswebservice</target>
+    <descriptor-file-name>jdbc/informix-test-jdbc.xml</descriptor-file-name>
+  </jdbc-system-resource>
+
+  <jdbc-system-resource>
+    <name>oracle-dw</name>
+    <target>bidswebservice</target>
+    <descriptor-file-name>jdbc/oracle-dw-jdbc.xml</descriptor-file-name>
+  </jdbc-system-resource>
+</domain>
